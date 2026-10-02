@@ -64,12 +64,17 @@ test('entrance motion respects the reduced-motion preference', async ({ page }) 
   });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
-  await expect(page.locator('.hero h1')).toHaveCSS('animation-name', 'heroCopyEnter');
-  await expect(page.locator('.hero-image')).toHaveCSS('animation-name', 'heroImageEnter');
+  await expect(page.locator('html')).toHaveClass(/motion-enabled/);
+  const heroCopy = page.locator('.hero-grid > div').first();
+  await expect(heroCopy).toHaveCSS('opacity', '1');
+  expect(await heroCopy.evaluate(element => getComputedStyle(element).transitionProperty)).toContain('transform');
+  await expect(page.locator('#scroll-progress')).toHaveCount(1);
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.reload();
-  await expect(page.locator('.hero h1')).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('html')).not.toHaveClass(/motion-enabled/);
+  await expect(heroCopy).toHaveCSS('opacity', '1');
+  await expect(page.locator('#scroll-progress')).toBeHidden();
   const tile = page.locator('#more-work .wc-work-item').first();
   await tile.scrollIntoViewIfNeeded();
   await expect(tile).toBeVisible();
@@ -133,7 +138,7 @@ test('submit, retry after lost response, then view and refresh only public order
   await page.goto('/track.html#token=' + token);
   await expect(page.locator('link[rel="icon"][href="/assets/meta/favicon.ico"]')).toHaveCount(1);
   await expect(page.locator('.site-header .logo')).toHaveAttribute('href', '/');
-  await expect(page.locator('.nav-links a')).toHaveCount(8);
+  await expect(page.locator('.nav-links a')).toHaveCount(4);
   await expect(page.locator('footer a[href="/terms.html"]')).toHaveCount(1);
   await expect(page.locator('#order-number')).toHaveText('ART-00001');
   await expect(page.locator('#tracking-status')).toHaveCount(0);

@@ -1,0 +1,31 @@
+# Local secrets and environment configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*-private/
+CREDENCIAIS*.md
+
+# Dependencies and generated files
+node_modules/
+.netlify/
+deno.lock
+dist/
+build/
+coverage/
+test-results/
+playwright-report/
+reports/
+*.log
+
+# Local editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local backups
+*.bak
+*.backup

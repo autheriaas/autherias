@@ -414,6 +414,7 @@
 </main>
 <footer><div class="wrap foot"><div>© 2026 Autheria's Community. Digital artist and art commission studio.</div><nav aria-label="Footer"><a href="#contact">Contacts</a><a href="https://www.instagram.com/autherias_consent/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://x.com/autherias" target="_blank" rel="noopener noreferrer">X</a><a href="https://www.youtube.com/@autherias" target="_blank" rel="noopener noreferrer">YouTube</a><a href="terms.html">Terms &amp; Conditions</a></nav></div></footer>
 <script src="js/requests.js"></script>
+<script src="js/animations.js"></script>
 <script>
 (function () {
 
@@ -463,25 +464,49 @@
     var workGroups = Array.prototype.slice.call(document.querySelectorAll('.work-group'));
     var workItems = Array.prototype.slice.call(document.querySelectorAll('.wc-work-item'));
     var filterBtns = Array.prototype.slice.call(filterBar.querySelectorAll('.filter-btn'));
+    var filterTimers = new WeakMap();
+    var filterVersion = 0;
 
     function applyFilter(filter, instant) {
+      var version = ++filterVersion;
+      var showing = [];
       workItems.forEach(function (item) {
+        var pendingTimer = filterTimers.get(item);
+        if (pendingTimer) {
+          clearTimeout(pendingTimer);
+          filterTimers.delete(item);
+        }
         var cats = (item.getAttribute('data-item-cat') || '').split(/\s+/);
         var show = filter === 'all' || cats.indexOf(filter) !== -1;
-        if (instant) { item.style.display = show ? '' : 'none'; return; }
+        if (instant) {
+          item.classList.remove('wc-hide');
+          item.style.display = show ? '' : 'none';
+          return;
+        }
         var wasHidden = item.style.display === 'none';
         if (show) {
-          if (wasHidden) {
-            item.style.display = '';
+          if (wasHidden) item.style.display = '';
+          if (wasHidden || item.classList.contains('wc-hide')) {
             item.classList.add('wc-hide');
-            void item.offsetWidth; /* force reflow so the fade-in actually transitions */
-            item.classList.remove('wc-hide');
+            showing.push(item);
           }
         } else if (!wasHidden) {
           item.classList.add('wc-hide');
-          setTimeout(function () { item.style.display = 'none'; }, 220);
+          filterTimers.set(item, setTimeout(function () {
+            if (version === filterVersion && item.classList.contains('wc-hide')) item.style.display = 'none';
+            filterTimers.delete(item);
+          }, 220));
         }
       });
+
+      if (showing.length) {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            if (version !== filterVersion) return;
+            showing.forEach(function (item) { item.classList.remove('wc-hide'); });
+          });
+        });
+      }
       function syncGroupHeadings() {
         workGroups.forEach(function (g) {
           var hasVisible = Array.prototype.slice.call(g.querySelectorAll('.wc-work-item'))
