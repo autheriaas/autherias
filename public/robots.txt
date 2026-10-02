@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /track.html
 
 Sitemap: https://autherias.netlify.app/sitemap.xml
