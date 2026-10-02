@@ -5,7 +5,6 @@
   var finePointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
   var revealObserver = null;
   var tileObserver = null;
-  var tileAnimations = [];
   var tiltCleanups = [];
 
   function reducedMotion() {
@@ -94,35 +93,59 @@
   }
 
   function setupPortfolioTiles() {
-    if (reducedMotion() || !('IntersectionObserver' in window) || !Element.prototype.animate) return;
+    if (reducedMotion() || !('IntersectionObserver' in window)) return;
+
+    var targets = Array.prototype.slice.call(document.querySelectorAll('#more-work .wc-work-item'));
+
+    function settleTile(element) {
+      element.classList.remove('motion-tile', 'is-visible');
+      element.style.removeProperty('--tile-delay');
+    }
+
+    function revealTile(element) {
+      if (!element.classList.contains('motion-tile')) return;
+      element.classList.add('is-visible');
+
+      var delay = parseInt(element.style.getPropertyValue('--tile-delay'), 10) || 0;
+      var finished = false;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        element.removeEventListener('transitionend', onTransitionEnd);
+        settleTile(element);
+      }
+      function onTransitionEnd(event) {
+        if (event.target === element && event.propertyName === 'opacity') finish();
+      }
+      element.addEventListener('transitionend', onTransitionEnd);
+      window.setTimeout(finish, delay + 850);
+    }
+
+    /* Arm tiles before observing them. The previous WAAPI animation applied
+       opacity: 0 only after IntersectionObserver's asynchronous callback,
+       which let a fully visible tile paint for one frame before disappearing. */
+    targets.forEach(function (item) {
+      var siblings = Array.prototype.slice.call(item.parentElement.children);
+      var position = siblings.indexOf(item);
+      item.style.setProperty('--tile-delay', (position % 4) * 65 + 'ms');
+      item.classList.add('motion-tile');
+    });
 
     tileObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         tileObserver.unobserve(entry.target);
-
-        var siblings = Array.prototype.slice.call(entry.target.parentElement.children);
-        var position = siblings.indexOf(entry.target);
-        var animation = entry.target.animate([
-          { opacity: 0, transform: 'translateY(16px)' },
-          { opacity: 1, transform: 'translateY(0)' }
-        ], {
-          duration: 520,
-          delay: (position % 4) * 55,
-          easing: 'cubic-bezier(.16,.84,.44,1)',
-          fill: 'backwards'
-        });
-
-        tileAnimations.push(animation);
-        function releaseAnimation() {
-          tileAnimations = tileAnimations.filter(function (item) { return item !== animation; });
-        }
-        animation.finished.then(releaseAnimation, releaseAnimation);
+        revealTile(entry.target);
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
 
-    document.querySelectorAll('#more-work .wc-work-item').forEach(function (item) {
-      tileObserver.observe(item);
+    targets.forEach(function (item) {
+      var box = item.getBoundingClientRect();
+      if (box.top < window.innerHeight * 0.95 && box.bottom > 0) {
+        requestAnimationFrame(function () { revealTile(item); });
+      } else {
+        tileObserver.observe(item);
+      }
     });
   }
 
@@ -192,7 +215,10 @@
     revealObserver = null;
     if (tileObserver) tileObserver.disconnect();
     tileObserver = null;
-    tileAnimations.splice(0).forEach(function (animation) { animation.cancel(); });
+    document.querySelectorAll('.motion-tile').forEach(function (element) {
+      element.classList.remove('motion-tile', 'is-visible');
+      element.style.removeProperty('--tile-delay');
+    });
     document.querySelectorAll('.motion-reveal').forEach(settleReveal);
     tiltCleanups.splice(0).forEach(function (cleanup) { cleanup(); });
   }

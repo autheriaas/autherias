@@ -220,6 +220,8 @@ footer{padding:36px 0 48px;border-top:1px solid var(--border);color:var(--muted)
 .motion-enabled.motion-ready .hero .arch{transition-delay:.08s}
 .motion-reveal{opacity:0;transform:translateY(18px) scale(.99);transition:opacity .58s cubic-bezier(.16,.84,.44,1),transform .58s cubic-bezier(.16,.84,.44,1);transition-delay:var(--reveal-delay,0ms);will-change:opacity,transform}
 .motion-reveal.is-visible{opacity:1;transform:none}
+.motion-enabled .motion-tile:not(.wc-hide){opacity:0;transform:translateY(18px) scale(.99);transition:opacity .58s cubic-bezier(.16,.84,.44,1),transform .58s cubic-bezier(.16,.84,.44,1);transition-delay:var(--tile-delay,0ms);will-change:opacity,transform}
+.motion-enabled .motion-tile.is-visible:not(.wc-hide){opacity:1;transform:none}
 .motion-tilt{transition:transform .4s cubic-bezier(.16,.84,.44,1)}
 .motion-tilt.is-tilting{transition-duration:.08s}
 .item,.tier,.pay,.review-card{transform-style:preserve-3d}
@@ -240,6 +242,7 @@ footer{padding:36px 0 48px;border-top:1px solid var(--border);color:var(--muted)
 
 @media (prefers-reduced-motion:reduce){
   .motion-enabled .hero-grid>div:first-child,.motion-enabled .hero .arch{opacity:1!important;transform:none!important}
+  .motion-tile,.motion-tile.is-visible{opacity:1!important;transform:none!important}
   .motion-tilt,.motion-tilt.is-tilting,.btn:hover,.btn:active,.modal-card,.topbar .mobile-menu,.work-item:hover,.work-item:hover img,.work-item.wc-hide,.filter-btn:hover{transform:none!important}
   .work-item{transition:opacity .15s ease,border-color .15s ease}
   .topbar .mobile-menu{transition:opacity .15s ease,visibility 0s linear .15s}
