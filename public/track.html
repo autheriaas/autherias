@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#f4f8f6">
+  <title>Track your order — Autheria's Community</title>
+  <link rel="icon" href="assets/meta/favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/meta/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/meta/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="assets/meta/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=DM+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/tracking.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <script defer src="js/requests.js"></script>
+  <script defer src="js/tracking.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a href="/" class="logo"><img src="/assets/images/autheria-cat-logo.png" alt="Autheria's Community logo">Autheria's Community</a>
+      <div class="nav-right">
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="/#more-work">Portfolio</a>
+          <a href="/#pricing">Pricing</a>
+          <a href="/#faq">FAQ</a>
+          <a href="/#cta">Contact</a>
+        </nav>
+        <a href="/#commission-form" class="btn btn-primary btn-sm">Start a Commission</a>
+        <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
+      <a href="/#more-work">Portfolio</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/#cta">Contact</a>
+      <a href="/#commission-form">Start a Commission</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="tracking-hero" aria-labelledby="tracking-heading">
+      <p class="eyebrow">Your creative journey</p>
+      <h1 id="tracking-heading">Track your <span>order.</span></h1>
+      <p class="intro">A little window into your commission's progress. Keep your tracking link private.</p>
+    </section>
+
+    <section id="order-card" class="card order-card" aria-labelledby="order-number" hidden>
+      <p class="eyebrow">Your commission</p>
+      <h2 id="order-number"></h2>
+      <p id="order-type" class="order-type"></p>
+      <p class="badge" id="order-status"></p>
+      <ol class="steps" aria-label="Commission progress"><li>Received</li><li>Contacted</li><li>In progress</li><li>Completed</li></ol>
+      <div class="order-note"><h3>A note from Autheria</h3><p id="order-message" class="message"></p></div>
+      <p class="muted" id="order-updated"></p>
+      <button id="refresh-order" class="btn btn-primary" type="button">Refresh status</button>
+      <p class="muted support-note">Need to change something? <a href="mailto:autheriawork@gmail.com">Contact Autheria</a>.</p>
+    </section>
+
+    <p id="save-link" class="save-link" hidden>Your new private link: <a id="new-tracking-link">Save this tracking link</a>. Bookmark this link or copy its address before leaving this page.</p>
+    <section id="confirm-card" class="card" hidden aria-labelledby="confirm-heading">
+      <p class="eyebrow">Secure recovery</p>
+      <h2 id="confirm-heading">Recover this order's access</h2>
+      <p>Confirm to create a new tracking link. The previous link for this order will stop working.</p>
+      <p class="muted">This recovery link expires after 15 minutes and works once.</p>
+      <button id="confirm-recovery" class="btn btn-primary" type="button">Confirm recovery</button>
+    </section>
+
+    <section class="card recovery-card" aria-labelledby="recover-heading">
+      <p class="eyebrow">Lost your link?</p>
+      <h2 id="recover-heading">Recover access</h2>
+      <p>Enter the email used for your commission. We'll send instructions for your orders.</p>
+      <form id="recovery-form">
+        <label for="recovery-email">Your email</label>
+        <input id="recovery-email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
+        <button type="submit" class="btn btn-primary">Send recovery email</button>
+        <p id="recovery-status" class="status-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <p class="muted contact-note">For questions, email <a href="mailto:autheriawork@gmail.com">autheriawork@gmail.com</a>.</p>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>© 2026 Autheria's Community · Art commission studio</div>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/autherias_consent/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://x.com/autherias" target="_blank" rel="noopener noreferrer">X / Twitter</a>
+        <a href="https://discord.gg/pQr7FQZQVC" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="https://www.youtube.com/@autherias" target="_blank" rel="noopener noreferrer">YouTube</a>
+        <a href="https://www.pinterest.com/autherias/" target="_blank" rel="noopener noreferrer">Pinterest</a>
+        <a href="https://linktr.ee/autherias" target="_blank" rel="noopener noreferrer">Linktree</a>
+        <a href="/terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

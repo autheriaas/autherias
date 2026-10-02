@@ -1,0 +1,17 @@
+/* Autheria's Community: shared tokens + fonts (index, terms, tracking). Palette: mist, sage, sky, apricot. */
+:root{
+  color-scheme:light;
+  --bg-deep:#f4f8f6; --bg-alt:#e8f1ee; --panel:#fff; --border:rgba(30,48,54,.13);
+  --cream:#1e3036; --muted:rgba(30,48,54,.7);
+  --teal:#2f6b59; --magenta:#c9714a; --yellow:#f6b48e; --violet:#6f98cc;
+  --bg:#f4f8f6; --bg-soft:#e8f1ee; --card:#fff; --text:#1e3036; --text-dim:rgba(30,48,54,.72);
+  --accent:#c9714a; --accent-2:#2f6b59;
+  --pill-no:#fbe6dc; --pill-no-text:#9a4a28; --pill-yes:#dff1e9; --pill-yes-text:#24604c;
+}
+html,body{overflow-x:clip;max-width:100%}
+body{background:var(--bg-deep);color:var(--cream);font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
+h1,h2,h3,h4{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;color:var(--cream)}
+.btn-primary{background:var(--yellow);color:#1e3036;box-shadow:none;border:0}
+.btn-outline{color:var(--cream);border-color:var(--border)}
+.site-header{background:#f4f8f6}
+img,video,iframe,table{max-width:100%}

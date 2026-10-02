@@ -1,0 +1,55 @@
+# Netlify config for Autheria's Community
+# Only the generated public site is published; server sources stay separate.
+
+[build]
+  command = "npm run build"
+  functions = "netlify/functions"
+  publish = "dist"
+
+[dev]
+  framework = "#static"
+  publish = "public"
+  port = 8888
+  autoLaunch = false
+
+# ---- Caching ---------------------------------------------------------
+# Images and video are named uniquely per asset and never change in place,
+# so browsers and Netlify's CDN can cache them essentially forever. This
+# is the single biggest "make the site feel fast" win for repeat visitors:
+# without this, every image/video is re-checked with the server on every
+# visit even though the bytes never change.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The chatbot widget script changes occasionally when it's updated, so
+# give it a short cache instead of "immutable" — still fast, but a new
+# deploy is picked up quickly.
+[[headers]]
+  for = "/js/autheria-chatbot-widget.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# HTML pages should always be re-checked so edits go live immediately,
+# but a few basic security headers cost nothing and are good hygiene.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Tracking pages never send referrers or allow third-party scripts.
+[[headers]]
+  for = "/track.html"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Referrer-Policy = "no-referrer"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Cache-Control = "no-store"
+    Referrer-Policy = "no-referrer"
