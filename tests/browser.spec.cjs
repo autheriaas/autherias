@@ -45,12 +45,12 @@ test('contact links, featured PFP image, and responsive contact layout', async (
   await expect(image).toHaveAttribute('src', 'assets/images/warhammer-chainsword-marine-fanart.jpg');
   await expect.poll(() => image.evaluate(img => img.naturalWidth)).toBeGreaterThan(0);
 
-  const stacked = async () => (await contacts.evaluateAll(cards => cards.map(card => Math.round(card.getBoundingClientRect().top)))).every((t, i, a) => i === 0 || t > a[i - 1]);
-  expect(await stacked()).toBe(true);
+  const contactColumns = async () => page.locator('.contacts').evaluate(element => getComputedStyle(element).gridTemplateColumns.split(/\s+/).length);
+  expect(await contactColumns()).toBe(2);
   await page.setViewportSize({ width: 768, height: 844 });
-  expect(await stacked()).toBe(true);
+  expect(await contactColumns()).toBe(2);
   await page.setViewportSize({ width: 390, height: 844 });
-  expect(await stacked()).toBe(true);
+  expect(await contactColumns()).toBe(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
   await expect(page.locator('.quick a')).toHaveCount(2);
 });
